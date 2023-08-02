@@ -1,0 +1,3 @@
+Fix reference items for different devices. 1250 px
+Fix xarry avatar for different devices. done
+Fix the Javascript done
