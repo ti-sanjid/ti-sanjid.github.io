@@ -971,6 +971,62 @@ main {
 }
 
 
+/* ;;;;;;;;;;; */
+.project-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  transition: transform 0.2s;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+}
+
+.project-img img {
+  width: 100%;
+  height: auto;
+}
+
+.project-details {
+  padding: 15px;
+}
+
+.project-title {
+  font-size: 1.2rem;
+  margin: 0 0 10px;
+}
+
+.project-description {
+  font-size: 0.9rem;
+  color:white;
+  margin: 0 0 10px;
+}
+
+.github-link {
+  text-decoration: none;
+  color: #08C;
+  font-weight: bold;
+}
+/* ;;;; */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
