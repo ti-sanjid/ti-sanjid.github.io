@@ -926,7 +926,9 @@ main {
   font-size: 0.9rem;
   color:white;
   margin: 0 0 10px;
+  padding: 10px;
 }
+
 
 .github-link {
   text-decoration: none;
