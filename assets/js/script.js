@@ -136,24 +136,99 @@ for (let i = 0; i < formInputs.length; i++) {
 
 
 
-// page navigation variables
+// // page navigation variables
+// const navigationLinks = document.querySelectorAll("[data-nav-link]");
+// const pages = document.querySelectorAll("[data-page]");
+
+// // add event to all nav link
+// for (let i = 0; i < navigationLinks.length; i++) {
+//   navigationLinks[i].addEventListener("click", function () {
+
+//     for (let i = 0; i < pages.length; i++) {
+//       if (this.innerHTML.toLowerCase() === pages[i].dataset.page) {
+//         pages[i].classList.add("active");
+//         navigationLinks[i].classList.add("active");
+//         window.scrollTo(0, 0);
+//       } else {
+//         pages[i].classList.remove("active");
+//         navigationLinks[i].classList.remove("active");
+//       }
+//     }
+
+//   });
+// }
+
+
+
+
+
+
+
+
+
+
+// const navigationLinks = document.querySelectorAll("[data-nav-link]");
+// const pages = document.querySelectorAll("[data-page]");
+
+// // This function updates the URL without reloading the page
+// function updateUrlWithoutReload(route) {
+//   history.pushState({}, "", route);
+// }
+
+// for (let i = 0; i < navigationLinks.length; i++) {
+//   navigationLinks[i].addEventListener("click", function (event) {
+//     event.preventDefault(); // Prevent the default behavior of following the link
+
+//     const targetPage = this.innerHTML.toLowerCase();
+
+//     // Update the URL
+//     updateUrlWithoutReload(`/${targetPage}`);
+
+//     for (let i = 0; i < pages.length; i++) {
+//       if (targetPage === pages[i].dataset.page) {
+//         pages[i].classList.add("active");
+//         navigationLinks[i].classList.add("active");
+//         window.scrollTo(0, 0);
+//       } else {
+//         pages[i].classList.remove("active");
+//         navigationLinks[i].classList.remove("active");
+//       }
+//     }
+//   });
+// }
+
+
+
+
+// This part is for NavBar
+
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
 
-// add event to all nav link
+// This function updates the URL without reloading the page
+function updateUrlWithoutReload(route) {
+  history.pushState({}, "", route);
+}
+
 for (let i = 0; i < navigationLinks.length; i++) {
-  navigationLinks[i].addEventListener("click", function () {
+  navigationLinks[i].addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent the default behavior of following the link
+
+    const targetPage = this.dataset.page; // Get the page name from data-page attribute
+
+    // Update the URL
+    updateUrlWithoutReload(`/${targetPage}`);
 
     for (let i = 0; i < pages.length; i++) {
-      if (this.innerHTML.toLowerCase() === pages[i].dataset.page) {
+      if (targetPage === pages[i].dataset.page) {
         pages[i].classList.add("active");
         navigationLinks[i].classList.add("active");
         window.scrollTo(0, 0);
       } else {
         pages[i].classList.remove("active");
-        navigationLinks[i].classList.remove("active");
+        // navigationLinks[i].classList.remove("active");
       }
     }
-
   });
 }
+
