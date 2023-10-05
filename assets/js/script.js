@@ -115,24 +115,24 @@ for (let i = 0; i < filterBtn.length; i++) {
 
 
 
-// contact form variables
-const form = document.querySelector("[data-form]");
-const formInputs = document.querySelectorAll("[data-form-input]");
-const formBtn = document.querySelector("[data-form-btn]");
+// // contact form variables
+// const form = document.querySelector("[data-form]");
+// const formInputs = document.querySelectorAll("[data-form-input]");
+// const formBtn = document.querySelector("[data-form-btn]");
 
-// add event to all form input field
-for (let i = 0; i < formInputs.length; i++) {
-  formInputs[i].addEventListener("input", function () {
+// // add event to all form input field
+// for (let i = 0; i < formInputs.length; i++) {
+//   formInputs[i].addEventListener("input", function () {
 
-    // check form validation
-    if (form.checkValidity()) {
-      formBtn.removeAttribute("disabled");
-    } else {
-      formBtn.setAttribute("disabled", "");
-    }
+//     // check form validation
+//     if (form.checkValidity()) {
+//       formBtn.removeAttribute("disabled");
+//     } else {
+//       formBtn.setAttribute("disabled", "");
+//     }
 
-  });
-}
+//   });
+// }
 
 
 
@@ -271,7 +271,43 @@ for (let i = 0; i < navigationLinks.length; i++) {
 
 
 
+// function showFullDescription() {
+//   const shortDesc = document.querySelector('.short-description');
+//   const fullDesc = document.querySelector('.full-description');
 
+//   shortDesc.classList.add('hidden');
+//   fullDesc.classList.add('show-full');
+// }
+
+// function showShortDescription() {
+//   const shortDesc = document.querySelector('.short-description');
+//   const fullDesc = document.querySelector('.full-description');
+
+//   shortDesc.classList.remove('hidden');
+//   fullDesc.classList.remove('show-full');
+// }
+
+
+
+
+
+function showFullDescription(index) {
+  const projectItem = document.querySelectorAll('.project-item')[index - 1];
+  const shortDesc = projectItem.querySelector('.short-description');
+  const fullDesc = projectItem.querySelector('.full-description');
+
+  shortDesc.style.display = 'none';
+  fullDesc.style.display = 'block';
+}
+
+function showShortDescription(index) {
+  const projectItem = document.querySelectorAll('.project-item')[index - 1];
+  const shortDesc = projectItem.querySelector('.short-description');
+  const fullDesc = projectItem.querySelector('.full-description');
+
+  shortDesc.style.display = 'block';
+  fullDesc.style.display = 'none';
+}
 
 
 

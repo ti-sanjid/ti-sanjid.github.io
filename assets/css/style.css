@@ -774,6 +774,87 @@ main {
 }
 
 
+/* table */
+
+
+
+table {
+  border-collapse: collapse;
+  width: 95%;
+  border: 3px solid black;
+}
+
+th, td {
+  text-align: center;
+  padding: 8px;
+  border: 3px solid black;
+
+}
+
+th {
+  background-color: #097435;
+  color: white;
+  border: 3px solid black;
+
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(odd) {
+  background-color: #ddd;
+}
+
+.table-container {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  
+}
+
+
+/* awards */
+
+ul {
+  list-style-type: ; /* This sets the bullet point style */
+  margin-left: 30px; /* This adds some space between the bullet point and the text */
+}
+
+.award-list {
+  list-style-type: square;
+  margin-left: 20px;
+  color: #ffffff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * skills 
  */
@@ -886,9 +967,44 @@ main {
 .project-item { display: none; }
 
 .project-item.active {
-  display: block;
+  display: flex;
   animation: scaleUp 0.25s ease forwards;
+  
 }
+
+
+/* read more button */
+
+.full-description {
+  display: none;
+  
+
+}
+
+.show-full {
+  display: block;
+}
+
+.show-short {
+  display: block;
+}
+
+.hide-short {
+  display: none;
+}
+
+
+
+.full-description button,
+.short-description button {
+    color: orange;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+
+
 
 
 
@@ -1470,6 +1586,9 @@ textarea.form-input::-webkit-resizer { display: none; }
   }
 
   .skills-item:not(:last-child) { margin-bottom: 25px; }
+
+
+
 
 
 
