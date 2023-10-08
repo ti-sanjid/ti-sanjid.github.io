@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Heat Index Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+
+        input,
+        button,
+        select {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            background-color: #fff;
+            border: 1px solid #ccc;
+        }
+
+        .filter-select-box {
+            position: relative;
+<!--             width: calc(50% - 10px); -->
+            margin-left: 0px;
+            text-align: left;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            text-align: left;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .select-value {
+            display: inline-block;
+            max-width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .select-icon {
+            display: inline-block;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .select-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
+            display: none;
+        }
+
+        .select-list.active {
+            display: block;
+        }
+
+        .select-item {
+            width: 100%;
+            text-align: left;
+        }
+
+        .select-item button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            border: none;
+            background: none;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .select-item button:focus {
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <label for="">Temperature Unit</label>
+    <div class="filter-select-box" id="tempUnitSelect">
+        <select id="tempUnit" name="tempUnit">
+            <option value="C">Celcius</option>
+            <option value="F">Farenheit</option>
+            <option value="K">Kelvin</option>
+        </select>
+    </div>
+
+    <label for="temp">Temperature</label>
+    <input type="text" id="temp">
+
+
+
+    <label for="hum">Relative Humidity (%):</label>
+    <input type="text" id="hum">
+
+
+
+
+
+    <button onclick="calculateHeatIndex()">Calculate Heat Index</button>
+
+    <input type="text" id="result" disabled>
+
+    <script>
+        // Function to handle custom select box interaction
+        function handleCustomSelect(event) {
+            let selectBox = event.target.closest('.filter-select-box');
+            let selectValue = selectBox.querySelector('.select-value');
+            let selectList = selectBox.querySelector('.select-list');
+
+            selectList.classList.toggle('active');
+            selectValue.textContent = event.target.textContent;
+
+            let selectItemButtons = selectBox.querySelectorAll('.select-item button');
+
+            selectItemButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    selectValue.textContent = button.textContent;
+                    selectList.classList.remove('active');
+                });
+            });
+        }
+
+        // Add event listener for custom select box
+        document.getElementById('tempUnitSelect').addEventListener('click', handleCustomSelect);
+        function heatIndex(T, RH) {
+            let HI = -42.379 + 2.04901523*T + 10.14333127*RH - 0.22475541*T*RH - 0.00683783*Math.pow(T, 2) -
+                0.05481717*Math.pow(RH, 2) + 0.00122874*Math.pow(T, 2)*RH + 0.00085282*T*Math.pow(RH, 2) -
+                0.00000199*Math.pow(T, 2)*Math.pow(RH, 2);
+            
+            if (RH < 13 && T >= 80 && T <= 112) {
+                let ADJUSTMENT = ((13 - RH) / 4) * Math.sqrt((17 - Math.abs(T - 95)) / 17);
+                HI -= ADJUSTMENT;
+            }
+            
+            if (RH > 85 && T >= 80 && T <= 87) {
+                let ADJUSTMENT = ((RH - 85) / 10) * ((87 - T) / 5);
+                HI += ADJUSTMENT;
+            }
+            
+            if (HI < 80) {
+                HI = 0.5 * (T + 61.0 + ((T - 68.0) * 1.2) + (RH * 0.094));
+            }
+
+            return HI.toFixed(2);
+        }
+
+        function calculateHeatIndex() {
+            let temp = parseFloat(document.getElementById("temp").value);
+            let hum = parseFloat(document.getElementById("hum").value);
+
+            // Get selected temperature unit
+            let tempUnit = document.getElementById("tempUnit").value;
+
+            if (tempUnit === "C") {
+                temp = (temp * 9/5) + 32; // Convert to Fahrenheit
+            } else if (tempUnit === "K") {
+                temp = (temp * 9/5) - 459.67; // Convert to Fahrenheit
+            }
+
+            let HI = heatIndex(temp, hum);
+
+            document.getElementById("result").value = HI + " °F";
+        }
+
+
+       
+
+
+    </script>
+
+</body>
+
+</html>

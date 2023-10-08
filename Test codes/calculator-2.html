@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Heat Index Calculator</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+max-width: 400px;
+margin: 0 auto;
+padding: 20px;
+text-align: center;
+background-color: #f4f4f4;
+}
+input, button {
+margin-bottom: 10px;
+padding: 10px;
+font-size: 16px;
+width: 100%;
+box-sizing: border-box;
+}
+button {
+background-color: #007bff;
+color: #fff;
+cursor: pointer;
+border: none;
+}
+button:hover {
+background-color: #0056b3;
+}
+
+#result {
+font-size: 18px;
+font-weight: bold;
+color: #333;
+background-color: #fff;
+border: 1px solid #ccc;
+}
+</style>
+</head>
+<body>
+    <label for="temp">Temperature (°F):</label>
+<input type="text" id="temp">
+
+<label for="hum">Relative Humidity (%):</label>
+<input type="text" id="hum">
+
+<button onclick="calculateHeatIndex()">Calculate Heat Index</button>
+
+<input type="text" id="result" disabled>
+
+<script>
+    function calculateHeatIndex() {
+        let temp = parseFloat(document.getElementById("temp").value);
+        let hum = parseFloat(document.getElementById("hum").value);
+
+        let HIADJ;
+        let HI = -42.379 + 2.04901523*temp + 10.14333127*hum - .22475541*temp*hum - .00683783*temp*temp - .05481717*hum*hum + .00122874*temp*temp*hum + .00085282*temp*hum*hum - .00000199*temp*temp*hum*hum;
+
+        console.log("Preliminary Heat Index is " + HI);
+
+        if (hum < 13 && temp > 80 && temp < 112) {
+            let x = ((13 - hum)/4) * (Math.sqrt(17-Math.abs(temp-95)/17));
+            HIADJ = HI - x;
+            console.log("Subtracted x=" + x + ". New heat index after adjustment is HIADJ= " + HIADJ);
+        } else if (hum > 85 && temp > 80 && temp < 87) {
+            let y = ((hum - 85)/10)*((87-temp)/5);
+            HIADJ = HI + y;
+            console.log("Added y=" + y + ". New heat index after adjustment is HIADJ=" + HIADJ);
+        } else {
+            HIADJ = HI;
+            console.log("Heat index with no adjustment is " + HIADJ);
+        }
+
+        document.getElementById("result").value = HIADJ.toFixed(2);
+    }
+</script>
+</body>
+</html>
+
