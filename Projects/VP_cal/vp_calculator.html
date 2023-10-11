@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Torikul Islam Sanjid</title>
+
+  <!--
+    - favicon
+  -->
+  <link rel="shortcut icon" href="./assets/images/meteorology-2.png" type="image/x-icon">
+  <!-- <link rel="shortcut icon" href="./assets/images/meteorology-3.png" type="image/x-icon"> -->
+
+
+  <!--
+    - custom css link
+  -->
+  <link rel="stylesheet" href="vpstyle.css">
+
+  <!--
+    - google font link
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!--
+    - #MAIN
+  -->
+
+  <main>
+
+    <!--
+      - #SIDEBAR
+    -->
+
+    <!--
+      - #main-content
+    -->
+
+    <div class="main-content">
+
+
+
+      <header class="title">
+        <h2 class="heading">Calculator</h2>
+      </header>
+
+      <!--
+        - #ABOUT
+      -->
+      <article class="about active">
+        <h2 class="cal-type">Heat Index Calculator</h2>
+
+
+
+        <label for="unit">Vapout Pressure Type</label>
+        <div id="vptypeSelect">
+            <select id="vptype" name="vptype">
+                <option value="n" disabled selected>Select Unit</option>
+                <option value="svp">saturated vapor pressure</option>
+                <option value="avp">actual vapor pressure</option>
+            </select>
+        </div>
+        <div id="errorMessage_1" class="hidden">*Please select a Vapour Pressure type.</div>
+
+
+        <label for="unit">Temperature Unit</label>
+        <div id="tempUnitSelect">
+            <select id="tempUnit" name="tempUnit">
+                <option value="n" disabled selected>Select Unit</option>
+                <option value="C">Celsius</option>
+                <option value="F">Farenheit</option>
+                <option value="K">Kelvin</option>
+            </select>
+        </div>
+        <div id="errorMessage_2" class="hidden">*Please select a temperature unit.</div>
+        
+      
+    
+        <label for="temp">Temperature</label>
+        <input type="text" id="temp" placeholder="Temperature">
+    
+    
+    
+    
+    
+    
+        <button class="calculate" onclick="calculateHeatIndex()">Calculate Heat Index</button>
+    
+        <input type="text" id="result" placeholder="Your Result" disabled>
+
+
+      </article>
+
+    </div>
+
+  </main>
+
+
+
+
+
+
+  <!--
+    - custom js link
+  -->
+  <script>
+    function updatePlaceholders() {
+        var vptype = document.getElementById("vptype").value;
+        var tempInput = document.getElementById("temp");
+
+        if (vptype === "svp") {
+            tempInput.placeholder = "Air Temperature";
+        } else if (vptype === "avp") {
+            tempInput.placeholder = "Dewpoint Temperature";
+        }
+    }
+    // Add event listener for vapor pressure type select
+    document.getElementById('vptypeSelect').addEventListener('change', updatePlaceholders);
+
+
+
+
+
+    // Function to handle custom select box interaction
+    function handleCustomSelect(event) {
+        let selectBox = event.target.closest('.filter-select-box');
+        let selectValue = selectBox.querySelector('.select-value');
+        let selectList = selectBox.querySelector('.select-list');
+
+        selectList.classList.toggle('active');
+        selectValue.textContent = event.target.textContent;
+
+        let selectItemButtons = selectBox.querySelectorAll('.select-item button');
+
+        selectItemButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                selectValue.textContent = button.textContent;
+                selectList.classList.remove('active');
+            });
+        });
+    }
+
+    // Add event listener for custom select box
+    document.getElementById('tempUnitSelect').addEventListener('click', handleCustomSelect);
+
+    function vp_formula(t) {
+        let a = 7.5 * t / (237.7 + t);
+        return 6.11 * Math.pow(10, a);
+    }
+
+
+
+    function calculateHeatIndex() {
+        let tempUnit = document.getElementById("tempUnit").value;
+        let vptype= document.getElementById("vptype").value;
+
+        var errorMessage_1 = document.getElementById("errorMessage_1");
+        var errorMessage_2 = document.getElementById("errorMessage_2");
+
+        if (vptype === "n") {
+          errorMessage_1.classList.remove("hidden");
+          return; // Stop further execution
+        } else {
+          errorMessage_1.classList.add("hidden");
+        }
+
+
+        if (tempUnit === "n") {
+          errorMessage_2.classList.remove("hidden");
+          return; // Stop further execution
+        } else {
+          errorMessage_2.classList.add("hidden");
+        }
+
+        // Rest of your code for calculations
+        let temp = parseFloat(document.getElementById("temp").value);
+
+        if (tempUnit === "F") {
+            temp = (temp - 32) * 5/9; // Convert to Fahrenheit
+        } else if (tempUnit === "K") {
+            temp = temp - 273.15; // Convert to Fahrenheit
+        }
+
+        let VP = vp_formula(temp);
+
+        // converting to other two units
+        // let tempInCelsius = (temp - 32) * 5/9;
+        // let tempInKelvin = (temp + 459.67) * 5/9;
+
+        // Giving the result
+        document.getElementById("result").value = VP.toFixed(2)+"hPa";
+
+        // document.getElementById("result").value = HI + " °F/ "+ tempInCelsius.toFixed(2)+"°C/ "+tempInCelsius.toFixed(2)+"K";
+    }
+
+
+
+
+
+   
+
+
+</script>
+
+  <!--
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>

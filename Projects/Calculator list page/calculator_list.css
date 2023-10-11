@@ -240,6 +240,49 @@ main {
 }
 
 
+
+/*-----------------------------------*\
+  #Calculator list DESINGN
+\*-----------------------------------*/
+
+
+.bullet-columns {
+  /* display: flex; */
+  justify-content: space-between;
+  margin-left: 100px;
+  /* justify-content: center; */
+  
+
+}
+
+
+
+.award-list {
+  list-style-type: square;
+  color: #ffffff;
+}
+
+.bullet-columns ul li:hover {
+  color: #06a38e; /* Change the color on hover */
+  cursor: pointer; /* Change the cursor to indicate interactivity */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*-----------------------------------*\
   #CALCULATOR DESING
 \*-----------------------------------*/
@@ -378,18 +421,6 @@ button{
 }
 
 
-.hidden {
-  display: none;
-}
-
-#errorMessage {
-  color: red;
-  font-size: small;
-}
-
-
-
-
 
 
 /*-----------------------------------*\
@@ -450,6 +481,9 @@ button{
  */
 
 @media (min-width: 450px) {
+  
+
+
 
   
 
@@ -552,6 +586,46 @@ button{
   .about-text { margin-bottom: 40px; }
 
 
+  
+  /* bullet ponts */
+
+  .bullet-columns {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 0px;
+
+    
+  
+  }
+  
+  .bullet-column1 {
+    flex: 1;
+    /* margin-right: 10px; Adjust spacing between columns as needed */
+    margin-left: 100px;
+    color: #ffffff;
+    list-style-type: square;
+    
+  }
+  .bullet-column2 {
+    /* flex: 1; */
+    /* margin-right: 10px; Adjust spacing between columns as needed */
+    margin-right: 0px;
+    color: #ffffff;
+  
+  }
+  .award-list {
+    list-style-type: square;
+    color: #ffffff;
+  }
+
+
+
+
+
+
+  
+
+
 }
 
 
@@ -569,6 +643,7 @@ button{
    */
 
   /* .sidebar, article { width: 700px; } */
+  
 
   
   
@@ -624,6 +699,45 @@ button{
     width: max-content;
     margin: auto;
   }
+
+    /* bullet ponts */
+
+    .bullet-columns {
+      display: flex;
+      justify-content: space-between;
+      margin-left: 0px;
+  
+      
+    
+    }
+    
+    .bullet-column1 {
+      flex: 1;
+      /* margin-right: 10px; Adjust spacing between columns as needed */
+      margin-left: 70px;
+      color: #ffffff;
+      list-style-type: square;
+      
+    }
+    .bullet-column2 {
+      flex: 1;
+      /* margin-right: 10px; Adjust spacing between columns as needed */
+      margin-right: 0px;
+      color: #ffffff;
+    
+    }
+    .award-list {
+      list-style-type: square;
+      color: #ffffff;
+    }
+  
+
+
+
+
+
+
+
 
 }
 

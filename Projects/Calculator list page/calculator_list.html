@@ -17,7 +17,7 @@
   <!--
     - custom css link
   -->
-  <link rel="stylesheet" href="calculatorstyle.css">
+  <link rel="stylesheet" href="calculator_list.css">
 
   <!--
     - google font link
@@ -55,39 +55,29 @@
         - #ABOUT
       -->
       <article class="about active">
-        <h2 class="cal-type">Heat Index Calculator</h2>
-
-        <label for="unit">Temperature Unit</label>
-        <div  id="tempUnitSelect">
-          <select id="tempUnit" name="tempUnit">
-              <option value="n" disabled selected>Select Unit</option>
-              <option value="C">Celsius</option>
-              <option value="F">Farenheit</option>
-              <option value="K">Kelvin</option>
-          </select>
+        <h2 class="cal-type">List of Calculators</h2>
+        
+        <div class="bullet-columns">
+            <div class="bullet-column1">
+                <ul >
+                    <li class="award-list">Heat Index</li>
+                    <li class="award-list">Vapour Pressure </li>
+                    <li class="award-list">Relative Humidity</li>
+                    <!-- Add more points as needed -->
+                </ul>
+            </div>
+            
+            <div class="bullet-column2">
+                <ul>
+                    <li class="award-list">Temperature Converter</li>
+                    <li class="award-list">Point B</li>
+                    <li class="award-list">Point C</li>
+                    <!-- Add more points as needed -->
+                </ul>
+            </div>
         </div>
-        <div id="errorMessage" class="hidden">*Please select a temperature unit.</div>
-
-      
+    </article>
     
-        <label for="temp">Temperature</label>
-        <input type="text" id="temp" placeholder="Temperature">
-    
-    
-    
-        <label for="hum">Relative Humidity (%)</label>
-        <input type="text" id="hum" placeholder="Relative Humidity">
-    
-    
-    
-    
-    
-        <button class="calculate" onclick="calculateHeatIndex()">Calculate Heat Index</button>
-    
-        <input type="text" id="result" placeholder="Your Result" disabled>
-
-
-      </article>
 
     </div>
 
@@ -145,47 +135,12 @@
         return HI.toFixed(2);
     }
 
-    // function calculateHeatIndex() {
-    //     let temp = parseFloat(document.getElementById("temp").value);
-    //     let hum = parseFloat(document.getElementById("hum").value);
-
-    //     // Get selected temperature unit
-    //     let tempUnit = document.getElementById("tempUnit").value;
-
-    //     if (tempUnit === "C") {
-    //         temp = (temp * 9/5) + 32; // Convert to Fahrenheit
-    //     } else if (tempUnit === "K") {
-    //         temp = (temp * 9/5) - 459.67; // Convert to Fahrenheit
-    //     }
-
-    //     let HI = heatIndex(temp, hum);
-
-    //     // converting to other two units
-    //     let tempInCelsius = (temp - 32) * 5/9;
-    //     let tempInKelvin = (temp + 459.67) * 5/9;
-
-
-
-    //     // Giving the result
-    //     // document.getElementById("result").value = `HI: ${HI.toFixed(2)} °F, ${tempInCelsius.toFixed(2)} °C, ${tempInKelvin.toFixed(2)} K`;
-    //     // let resultString = `HI: ${HI.toFixed(2)} °F, ${tempInCelsius.toFixed(2)} °C, ${tempInKelvin.toFixed(2)} K`;
-        
-    //     document.getElementById("result").value = HI + " °F/ "+ tempInCelsius.toFixed(2)+"°C/ "+tempInCelsius.toFixed(2)+"K";
-    // }
     function calculateHeatIndex() {
-        let tempUnit = document.getElementById("tempUnit").value;
-        var errorMessage = document.getElementById("errorMessage");
-
-        if (tempUnit === "n") {
-          errorMessage.classList.remove("hidden");
-          return; // Stop further execution
-        } else {
-            errorMessage.classList.add("hidden");
-        }
-
-        // Rest of your code for calculations
         let temp = parseFloat(document.getElementById("temp").value);
         let hum = parseFloat(document.getElementById("hum").value);
+
+        // Get selected temperature unit
+        let tempUnit = document.getElementById("tempUnit").value;
 
         if (tempUnit === "C") {
             temp = (temp * 9/5) + 32; // Convert to Fahrenheit
@@ -199,7 +154,12 @@
         let tempInCelsius = (temp - 32) * 5/9;
         let tempInKelvin = (temp + 459.67) * 5/9;
 
+
+
         // Giving the result
+        // document.getElementById("result").value = `HI: ${HI.toFixed(2)} °F, ${tempInCelsius.toFixed(2)} °C, ${tempInKelvin.toFixed(2)} K`;
+        // let resultString = `HI: ${HI.toFixed(2)} °F, ${tempInCelsius.toFixed(2)} °C, ${tempInKelvin.toFixed(2)} K`;
+        
         document.getElementById("result").value = HI + " °F/ "+ tempInCelsius.toFixed(2)+"°C/ "+tempInCelsius.toFixed(2)+"K";
     }
 

@@ -378,16 +378,15 @@ button{
 }
 
 
+
 .hidden {
   display: none;
 }
 
-#errorMessage {
+#errorMessage_1,#errorMessage_2 {
   color: red;
   font-size: small;
 }
-
-
 
 
 
