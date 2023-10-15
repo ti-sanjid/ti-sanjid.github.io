@@ -377,13 +377,15 @@ button{
   
 }
 
+
+
 /* Error massage */
 
 .hidden {
   display: none;
 }
 
-#errorMessage {
+#airTempErrorMessage,#dewTempErrorMessage {
   color: red;
   font-size: small;
 }

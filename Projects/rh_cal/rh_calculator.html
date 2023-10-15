@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Torikul Islam Sanjid</title>
+
+  <!--
+    - favicon
+  -->
+  <link rel="shortcut icon" href="./assets/images/meteorology-2.png" type="image/x-icon">
+  <!-- <link rel="shortcut icon" href="./assets/images/meteorology-3.png" type="image/x-icon"> -->
+
+
+  <!--
+    - custom css link
+  -->
+  <link rel="stylesheet" href="rh_style.css">
+
+  <!--
+    - google font link
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!--
+    - #MAIN
+  -->
+
+  <main>
+
+    <!--
+      - #SIDEBAR
+    -->
+
+    <!--
+      - #main-content
+    -->
+
+    <div class="main-content">
+
+
+
+      <header class="title">
+        <h2 class="heading">Calculator</h2>
+      </header>
+
+      <!--
+        - #ABOUT
+      -->
+      <article class="about active">
+        <h2 class="cal-type">Relative Humidity Calculator</h2>
+    
+        <label for="airTempUnit">Unit of Air Temperature</label>
+        <div id="airTempUnitSelect">
+            <select id="airTempUnit" name="airTempUnit">
+                <option value="n" disabled selected>Select Unit</option>
+                <option value="C">Celsius</option>
+                <option value="F">Fahrenheit</option>
+                <option value="K">Kelvin</option>
+            </select>
+        </div>
+        <div id="airTempErrorMessage" class="hidden">*Please select a temperature unit.</div>
+    
+        <label for="airTemp">Air Temperature</label>
+        <input type="text" id="airTemp" placeholder="Air Temperature">
+    
+        <label for="dewTempUnit">Unit of Dewpoint Temperature</label>
+        <div id="dewTempUnitSelect">
+            <select id="dewTempUnit" name="dewTempUnit">
+                <option value="n" disabled selected>Select Unit</option>
+                <option value="C">Celsius</option>
+                <option value="F">Fahrenheit</option>
+                <option value="K">Kelvin</option>
+            </select>
+        </div>
+        <div id="dewTempErrorMessage" class="hidden">*Please select a temperature unit.</div>
+    
+        <label for="dewTemp">Dewpoint Temperature</label>
+        <input type="text" id="dewTemp" placeholder="Dewpoint Temperature">
+    
+        <button class="calculate" onclick="calculateRelativeHumidity()">Calculate <br> Relative Humidity</button>
+    
+        <input type="text" id="result" placeholder="Your Result" disabled>
+    </article>
+    
+
+    </div>
+
+  </main>
+
+
+
+
+
+
+  <!--
+    - custom js link
+  -->
+  <script>
+    function handleCustomSelect(event) {
+        let selectBox = event.target.closest('.filter-select-box');
+        let selectValue = selectBox.querySelector('.select-value');
+        let selectList = selectBox.querySelector('.select-list');
+
+        selectList.classList.toggle('active');
+        selectValue.textContent = event.target.textContent;
+
+        let selectItemButtons = selectBox.querySelectorAll('.select-item button');
+
+        selectItemButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                selectValue.textContent = button.textContent;
+                selectList.classList.remove('active');
+            });
+        });
+    }
+
+    document.getElementById('airTempUnitSelect').addEventListener('click', handleCustomSelect);
+    document.getElementById('dewTempUnitSelect').addEventListener('click', handleCustomSelect);
+
+
+
+
+    function relative_humidity(airTemp, dewTemp) {
+      var exponent_svp = (7.5 * airTemp) / (237.3 + airTemp);
+      var exponent_avp = (7.5 * dewTemp) / (237.3 + dewTemp);
+      var svp = 6.11 * Math.pow(10, exponent_svp);
+      var avp = 6.11 * Math.pow(10, exponent_avp);
+      let rhum = (avp / svp) * 100;
+      return rhum.toFixed(2);
+    }
+
+
+    function calculateRelativeHumidity() {
+      
+      var airTemp = parseFloat(document.getElementById("airTemp").value);
+      var dewTemp = parseFloat(document.getElementById("dewTemp").value);
+
+      var airTempUnit = document.getElementById("airTempUnit").value;
+      var dewTempUnit = document.getElementById("dewTempUnit").value;
+
+      var airTempErrorMessage = document.getElementById("airTempErrorMessage");
+      var dewTempErrorMessage = document.getElementById("dewTempErrorMessage");
+
+      // Validate air temperature unit
+      if (airTempUnit === "n") {
+          airTempErrorMessage.classList.remove("hidden");
+          return;
+      } else {
+          airTempErrorMessage.classList.add("hidden");
+      }
+
+      // Validate dew temperature unit
+      if (dewTempUnit === "n") {
+          dewTempErrorMessage.classList.remove("hidden");
+          return;
+      } else {
+          dewTempErrorMessage.classList.add("hidden");
+      }
+
+      // Convert temperatures to Kelvin if necessary
+      if (airTempUnit === "K") {
+          airTemp =airTemp-273.15;
+      } else if (airTempUnit === "F") {
+          airTemp = (airTemp - 32) * 5/9;
+      }
+
+      if (dewTempUnit === "K") {
+          dewTemp = dewTemp-273.15;
+      } else if (dewTempUnit === "F") {
+          dewTemp = (dewTemp - 32) * 5/9;
+      }
+
+      if (dewTemp > airTemp) {
+        alert("RH is greater than 100%.Please check to see if  dewpoint is greater than air temperature");
+        return;
+      }
+
+
+
+      let rhum = relative_humidity(airTemp,dewTemp)
+
+
+
+      // Display the result
+      document.getElementById("result").value = rhum+ " %";
+    }
+
+
+
+
+
+
+
+
+
+
+   
+
+
+</script>
+
+  <!--
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>

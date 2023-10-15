@@ -60,18 +60,18 @@
         <div class="bullet-columns">
             <div class="bullet-column1">
                 <ul >
-                    <li class="award-list">Heat Index</li>
-                    <li class="award-list">Vapour Pressure </li>
-                    <li class="award-list">Relative Humidity</li>
+                    <li class="cal-list"><a href="../HI_cal/HI_calculator.html">Heat Index</a></li>
+                    <li class="cal-list"><a href="../VP_cal/vp_calculator.html">Vapour Pressure </a></li>
+                    <li class="cal-list"><a href="../rh_cal/rh_calculator.html">Relative Humidity</a></li>
                     <!-- Add more points as needed -->
                 </ul>
             </div>
             
             <div class="bullet-column2">
                 <ul>
-                    <li class="award-list">Temperature Converter</li>
-                    <li class="award-list">Point B</li>
-                    <li class="award-list">Point C</li>
+                    <li class="cal-list"><a href="../Temp_converter/HI_calculator.html">Temperature Converter</a></li>
+                    <li class="cal-list">Wind Chill</li>
+                    <li class="cal-list"></li>
                     <!-- Add more points as needed -->
                 </ul>
             </div>
@@ -91,83 +91,13 @@
   <!--
     - custom js link
   -->
-  <script>
-    // Function to handle custom select box interaction
-    function handleCustomSelect(event) {
-        let selectBox = event.target.closest('.filter-select-box');
-        let selectValue = selectBox.querySelector('.select-value');
-        let selectList = selectBox.querySelector('.select-list');
-
-        selectList.classList.toggle('active');
-        selectValue.textContent = event.target.textContent;
-
-        let selectItemButtons = selectBox.querySelectorAll('.select-item button');
-
-        selectItemButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                selectValue.textContent = button.textContent;
-                selectList.classList.remove('active');
-            });
-        });
-    }
-
-    // Add event listener for custom select box
-    document.getElementById('tempUnitSelect').addEventListener('click', handleCustomSelect);
-    function heatIndex(T, RH) {
-        let HI = -42.379 + 2.04901523*T + 10.14333127*RH - 0.22475541*T*RH - 0.00683783*Math.pow(T, 2) -
-            0.05481717*Math.pow(RH, 2) + 0.00122874*Math.pow(T, 2)*RH + 0.00085282*T*Math.pow(RH, 2) -
-            0.00000199*Math.pow(T, 2)*Math.pow(RH, 2);
-        
-        if (RH < 13 && T >= 80 && T <= 112) {
-            let ADJUSTMENT = ((13 - RH) / 4) * Math.sqrt((17 - Math.abs(T - 95)) / 17);
-            HI -= ADJUSTMENT;
-        }
-        
-        if (RH > 85 && T >= 80 && T <= 87) {
-            let ADJUSTMENT = ((RH - 85) / 10) * ((87 - T) / 5);
-            HI += ADJUSTMENT;
-        }
-        
-        if (HI < 80) {
-            HI = 0.5 * (T + 61.0 + ((T - 68.0) * 1.2) + (RH * 0.094));
-        }
-
-        return HI.toFixed(2);
-    }
-
-    function calculateHeatIndex() {
-        let temp = parseFloat(document.getElementById("temp").value);
-        let hum = parseFloat(document.getElementById("hum").value);
-
-        // Get selected temperature unit
-        let tempUnit = document.getElementById("tempUnit").value;
-
-        if (tempUnit === "C") {
-            temp = (temp * 9/5) + 32; // Convert to Fahrenheit
-        } else if (tempUnit === "K") {
-            temp = (temp * 9/5) - 459.67; // Convert to Fahrenheit
-        }
-
-        let HI = heatIndex(temp, hum);
-
-        // converting to other two units
-        let tempInCelsius = (temp - 32) * 5/9;
-        let tempInKelvin = (temp + 459.67) * 5/9;
-
-
-
-        // Giving the result
-        // document.getElementById("result").value = `HI: ${HI.toFixed(2)} °F, ${tempInCelsius.toFixed(2)} °C, ${tempInKelvin.toFixed(2)} K`;
-        // let resultString = `HI: ${HI.toFixed(2)} °F, ${tempInCelsius.toFixed(2)} °C, ${tempInKelvin.toFixed(2)} K`;
-        
-        document.getElementById("result").value = HI + " °F/ "+ tempInCelsius.toFixed(2)+"°C/ "+tempInCelsius.toFixed(2)+"K";
-    }
+ <script>
 
 
    
 
 
-</script>
+ </script>
 
   <!--
     - ionicon link

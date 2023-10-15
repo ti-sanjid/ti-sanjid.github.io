@@ -249,7 +249,7 @@ main {
 .bullet-columns {
   /* display: flex; */
   justify-content: space-between;
-  margin-left: 100px;
+  margin-left: 140px;
   /* justify-content: center; */
   
 
@@ -257,14 +257,16 @@ main {
 
 
 
-.award-list {
+.cal-list {
   list-style-type: square;
   color: #ffffff;
 }
 
-.bullet-columns ul li:hover {
-  color: #06a38e; /* Change the color on hover */
+
+.cal-list a:hover {
+  color: #06a38e; /* Change the color to your preference */
   cursor: pointer; /* Change the cursor to indicate interactivity */
+
 }
 
 
@@ -481,9 +483,6 @@ button{
  */
 
 @media (min-width: 450px) {
-  
-
-
 
   
 
@@ -613,7 +612,7 @@ button{
     color: #ffffff;
   
   }
-  .award-list {
+  .cal-list {
     list-style-type: square;
     color: #ffffff;
   }
@@ -726,10 +725,12 @@ button{
       color: #ffffff;
     
     }
-    .award-list {
+    .cal-list {
       list-style-type: square;
       color: #ffffff;
     }
+
+
   
 
 
