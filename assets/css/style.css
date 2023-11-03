@@ -473,6 +473,40 @@ main {
 
 
 
+/* cv button */
+
+.view-cv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Add your specific styles for the "View CV" button here */
+}
+.view-cv button{
+  background-color: gold; /* Set the background color */
+  color: #ffffff; /* Set the text color */
+  border: none; /* Remove default button border */
+  border-radius: 5px; /* Set border radius for smooth corners */
+  padding: 5px 40px; /* Adjust padding as needed */
+  font-weight: bold;
+  font-size: 16px; /* Set font size */
+}
+.view-cv button {
+  /* ... (previous styles) */
+  transition: background-color 0.3s ease; /* Add a transition for smooth animation */
+}
+
+.view-cv button:hover {
+  background-color: #004138; /* Change the background color on hover */
+}
+
+
+
+
+
+
+
+
+
 
 
 /*-----------------------------------*\

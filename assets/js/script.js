@@ -313,4 +313,7 @@ function showShortDescription(index) {
 
 
 
+function openCV() {
+  window.open("https://drive.google.com/file/d/1wa8SDGIrMJSCDWFTNRzxMKWKbzZCSvkR/view?usp=sharing", "_blank");
+}
 
