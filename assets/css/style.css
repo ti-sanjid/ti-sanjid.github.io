@@ -852,7 +852,7 @@ tr:nth-child(odd) {
 
 ul {
   list-style-type: ; /* This sets the bullet point style */
-  margin-left: 30px; /* This adds some space between the bullet point and the text */
+  /* margin-left: 30px; This adds some space between the bullet point and the text */
 }
 
 .award-list {
