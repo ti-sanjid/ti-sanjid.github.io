@@ -314,6 +314,6 @@ function showShortDescription(index) {
 
 
 function openCV() {
-  window.open("https://drive.google.com/file/d/199RqXlPQWJk22lwzWWGmvl0LFmNsmzeh/view?usp=sharing", "_blank");
+  window.open("https://drive.google.com/file/d/17PPWBIvAYNfLU-UoTcnfRUXTyu4eMYHC/view?usp=sharing", "_blank");
 }
 
