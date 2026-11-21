@@ -360,12 +360,185 @@ function showShortDescription(index) {
 
 
 
-function openCV() {
-  window.open("https://drive.google.com/file/d/1ici9KE6j3hqpsxk3YcW32laEK69j_8Uq/view?usp=sharing", "_blank");
-}
-
 const copyrightYearEl = document.querySelector(".copyright-year");
 if (copyrightYearEl) {
   copyrightYearEl.textContent = new Date().getFullYear();
+}
+
+/* CV PDF Viewer Modal */
+const CV_PDF_URL = "/assets/aistudio/CV_TIS_2026_7e964248.pdf";
+const CV_DOWNLOAD_FILENAME = "Torikul_Islam_Sanjid_CV_2026.pdf";
+
+const cvTrigger = document.querySelector("[data-cv-trigger]");
+const cvModal = document.querySelector("[data-cv-modal]");
+const cvCloseBtns = document.querySelectorAll("[data-cv-close]");
+const cvStatus = document.querySelector("[data-cv-status]");
+const cvPagesContainer = document.querySelector("[data-cv-pages]");
+const cvPageInfo = document.querySelector("[data-cv-page-info]");
+const cvZoomInBtn = document.querySelector("[data-cv-zoom-in]");
+const cvZoomOutBtn = document.querySelector("[data-cv-zoom-out]");
+const cvZoomLabel = document.querySelector("[data-cv-zoom-label]");
+const cvDownloadBtn = document.querySelector("[data-cv-download]");
+const cvModalBody = document.querySelector("[data-cv-body]");
+
+let cvPdfBytes = null;
+let cvPdfDoc = null;
+let cvZoom = 1.0;
+let cvRenderSeq = 0;
+
+function updateZoomLabel() {
+  if (cvZoomLabel) {
+    cvZoomLabel.textContent = `${Math.round(cvZoom * 100)}%`;
+  }
+}
+
+async function fetchCvBytes() {
+  if (cvPdfBytes) return cvPdfBytes;
+  const response = await fetch(CV_PDF_URL, { credentials: "same-origin" });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+  const buffer = await response.arrayBuffer();
+  cvPdfBytes = new Uint8Array(buffer);
+  return cvPdfBytes;
+}
+
+async function loadCvPdfDoc() {
+  if (cvPdfDoc) return cvPdfDoc;
+  const pdfjsLib = await import("/vendor/pdfjs/pdf.min.mjs");
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "/vendor/pdfjs/pdf.worker.min.mjs";
+  const bytes = await fetchCvBytes();
+  const loadingTask = pdfjsLib.getDocument({ data: bytes.slice() });
+  cvPdfDoc = await loadingTask.promise;
+  return cvPdfDoc;
+}
+
+async function renderCvPages() {
+  if (!cvPagesContainer || !cvStatus) return;
+  const currentSeq = ++cvRenderSeq;
+
+  cvStatus.textContent = "Loading CV...";
+  cvStatus.classList.remove("hidden");
+
+  try {
+    const pdfDoc = await loadCvPdfDoc();
+    if (currentSeq !== cvRenderSeq) return;
+
+    const totalPages = pdfDoc.numPages;
+    if (cvPageInfo) {
+      cvPageInfo.textContent = `(${totalPages} ${totalPages === 1 ? "page" : "pages"})`;
+    }
+
+    const availableWidth = Math.max(
+      280,
+      Math.min(820, (cvModalBody ? cvModalBody.clientWidth : 820) - 48)
+    );
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const fragment = document.createDocumentFragment();
+
+    for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+      const page = await pdfDoc.getPage(pageNum);
+      if (currentSeq !== cvRenderSeq) return;
+
+      const baseViewport = page.getViewport({ scale: 1 });
+      const fitScale = availableWidth / baseViewport.width;
+      const cssScale = fitScale * cvZoom;
+      const cssViewport = page.getViewport({ scale: cssScale });
+      const renderViewport = page.getViewport({ scale: cssScale * dpr });
+
+      const canvas = document.createElement("canvas");
+      canvas.className = "cv-page-canvas";
+      canvas.width = Math.floor(renderViewport.width);
+      canvas.height = Math.floor(renderViewport.height);
+      canvas.style.width = `${Math.floor(cssViewport.width)}px`;
+      canvas.style.height = `${Math.floor(cssViewport.height)}px`;
+      canvas.setAttribute("aria-label", `CV Page ${pageNum} of ${totalPages}`);
+
+      const ctx = canvas.getContext("2d");
+      await page.render({ canvasContext: ctx, viewport: renderViewport }).promise;
+      if (currentSeq !== cvRenderSeq) return;
+
+      fragment.appendChild(canvas);
+    }
+
+    cvPagesContainer.innerHTML = "";
+    cvPagesContainer.appendChild(fragment);
+    cvStatus.classList.add("hidden");
+  } catch (err) {
+    if (currentSeq !== cvRenderSeq) return;
+    console.error("Failed to render CV PDF:", err);
+    cvStatus.textContent = "Unable to preview the PDF inline. Use the Download PDF button above to save the CV.";
+    cvStatus.classList.remove("hidden");
+  }
+}
+
+function openCvModal() {
+  if (!cvModal) return;
+  cvModal.classList.add("active");
+  cvModal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  updateZoomLabel();
+  renderCvPages();
+}
+
+function closeCvModal() {
+  if (!cvModal) return;
+  cvModal.classList.remove("active");
+  cvModal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+if (cvTrigger && cvModal) {
+  cvTrigger.addEventListener("click", function (event) {
+    event.preventDefault();
+    openCvModal();
+  });
+
+  for (let i = 0; i < cvCloseBtns.length; i++) {
+    cvCloseBtns[i].addEventListener("click", closeCvModal);
+  }
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && cvModal.classList.contains("active")) {
+      closeCvModal();
+    }
+  });
+}
+
+if (cvZoomInBtn) {
+  cvZoomInBtn.addEventListener("click", function () {
+    cvZoom = Math.min(2.0, Math.round((cvZoom + 0.2) * 10) / 10);
+    updateZoomLabel();
+    renderCvPages();
+  });
+}
+
+if (cvZoomOutBtn) {
+  cvZoomOutBtn.addEventListener("click", function () {
+    cvZoom = Math.max(0.6, Math.round((cvZoom - 0.2) * 10) / 10);
+    updateZoomLabel();
+    renderCvPages();
+  });
+}
+
+if (cvDownloadBtn) {
+  cvDownloadBtn.addEventListener("click", async function (event) {
+    event.preventDefault();
+    try {
+      const bytes = await fetchCvBytes();
+      const blob = new Blob([bytes], { type: "application/pdf" });
+      const blobUrl = URL.createObjectURL(blob);
+      const tempLink = document.createElement("a");
+      tempLink.href = blobUrl;
+      tempLink.download = CV_DOWNLOAD_FILENAME;
+      document.body.appendChild(tempLink);
+      tempLink.click();
+      document.body.removeChild(tempLink);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+    } catch (_err) {
+      window.location.href = `${CV_PDF_URL}?download=1`;
+    }
+  });
 }
 

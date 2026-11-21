@@ -28,6 +28,24 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(
+  '/vendor/pdfjs',
+  express.static(path.join(__dirname, 'node_modules', 'pdfjs-dist', 'build'), {
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith('.mjs')) {
+        res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+      }
+    },
+  })
+);
+
+app.get('/assets/aistudio/CV_TIS_2026_7e964248.pdf', (req, res, next) => {
+  if (req.query.download === '1') {
+    res.setHeader('Content-Disposition', 'attachment; filename="Torikul_Islam_Sanjid_CV_2026.pdf"');
+  }
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(__dirname, { index: 'index.html' }));
 

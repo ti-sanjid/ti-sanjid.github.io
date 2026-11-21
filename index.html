@@ -392,7 +392,7 @@
           <div>
             <h2 class="h2 article-title">Curriculum Vitae</h2>
           </div>
-          <a href="/assets/aistudio/CV_TIS_2026_7e964248.pdf" target="_blank" rel="noopener noreferrer" class="cv-download-btn">
+          <a href="/assets/aistudio/CV_TIS_2026_7e964248.pdf?download=1" download="Torikul_Islam_Sanjid_CV_2026.pdf" class="cv-download-btn" data-cv-trigger>
             <ion-icon name="document-text-outline"></ion-icon>
             <span>View Full CV (PDF)</span>
           </a>
@@ -1129,6 +1129,44 @@
 
 
 
+
+  <!--
+    - #CV PDF VIEWER MODAL
+  -->
+  <div class="cv-modal" data-cv-modal aria-hidden="true" role="dialog" aria-modal="true" aria-label="Curriculum Vitae PDF Viewer">
+    <div class="cv-modal-backdrop" data-cv-close></div>
+    <div class="cv-modal-dialog">
+      <div class="cv-modal-toolbar">
+        <div class="cv-modal-title-group">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <span class="cv-modal-title">Curriculum Vitae — Torikul Islam Sanjid</span>
+          <span class="cv-modal-pages" data-cv-page-info></span>
+        </div>
+        <div class="cv-modal-actions">
+          <div class="cv-zoom-controls">
+            <button type="button" class="cv-toolbar-btn" data-cv-zoom-out aria-label="Zoom out">
+              <ion-icon name="remove-outline"></ion-icon>
+            </button>
+            <span class="cv-zoom-level" data-cv-zoom-label>100%</span>
+            <button type="button" class="cv-toolbar-btn" data-cv-zoom-in aria-label="Zoom in">
+              <ion-icon name="add-outline"></ion-icon>
+            </button>
+          </div>
+          <a href="/assets/aistudio/CV_TIS_2026_7e964248.pdf?download=1" download="Torikul_Islam_Sanjid_CV_2026.pdf" class="cv-toolbar-download" data-cv-download>
+            <ion-icon name="download-outline"></ion-icon>
+            <span>Download PDF</span>
+          </a>
+          <button type="button" class="cv-toolbar-btn cv-modal-close-btn" data-cv-close aria-label="Close CV viewer">
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+      <div class="cv-modal-body" data-cv-body>
+        <div class="cv-modal-status" data-cv-status>Loading CV...</div>
+        <div class="cv-pages-container" data-cv-pages></div>
+      </div>
+    </div>
+  </div>
 
   <!--
     - custom js link
