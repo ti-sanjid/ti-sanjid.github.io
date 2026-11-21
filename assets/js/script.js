@@ -366,8 +366,8 @@ if (copyrightYearEl) {
 }
 
 /* CV PDF Viewer Modal */
-const CV_PDF_URL = "/assets/aistudio/CV_TIS_2026_7e964248.pdf";
-const CV_DOWNLOAD_FILENAME = "Torikul_Islam_Sanjid_CV_2026.pdf";
+const CV_PDF_URL = "./assets/cv/CV_TIS_2026.pdf";
+const CV_DOWNLOAD_FILENAME = "CV_TIS_2026.pdf";
 
 const cvTrigger = document.querySelector("[data-cv-trigger]");
 const cvModal = document.querySelector("[data-cv-modal]");
@@ -394,7 +394,8 @@ function updateZoomLabel() {
 
 async function fetchCvBytes() {
   if (cvPdfBytes) return cvPdfBytes;
-  const response = await fetch(CV_PDF_URL, { credentials: "same-origin" });
+  const resolvedUrl = new URL(CV_PDF_URL, window.location.href).href;
+  const response = await fetch(resolvedUrl, { credentials: "same-origin" });
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`);
   }

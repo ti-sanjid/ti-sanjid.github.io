@@ -44,9 +44,9 @@ app.use(
   })
 );
 
-app.get('/assets/aistudio/CV_TIS_2026_7e964248.pdf', (req, res, next) => {
+app.get('/assets/cv/CV_TIS_2026.pdf', (req, res, next) => {
   if (req.query.download === '1') {
-    res.setHeader('Content-Disposition', 'attachment; filename="Torikul_Islam_Sanjid_CV_2026.pdf"');
+    res.setHeader('Content-Disposition', 'attachment; filename="CV_TIS_2026.pdf"');
   }
   next();
 });
