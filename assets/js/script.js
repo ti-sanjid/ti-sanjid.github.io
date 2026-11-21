@@ -405,10 +405,26 @@ async function fetchCvBytes() {
 
 async function loadCvPdfDoc() {
   if (cvPdfDoc) return cvPdfDoc;
-  const pdfjsLib = await import("/vendor/pdfjs/pdf.min.mjs");
-  pdfjsLib.GlobalWorkerOptions.workerSrc = "/vendor/pdfjs/pdf.worker.min.mjs";
+  const pdfModuleUrl = new URL("./vendor/pdfjs/pdf.min.mjs", window.location.href).href;
+  const workerModuleUrl = new URL("./vendor/pdfjs/pdf.worker.min.mjs", window.location.href).href;
+  const standardFontDataUrl = new URL("./vendor/pdfjs/standard_fonts/", window.location.href).href;
+
+  const [pdfjsLib, workerModule] = await Promise.all([
+    import(pdfModuleUrl),
+    import(workerModuleUrl),
+  ]);
+
+  if (!globalThis.pdfjsWorker && workerModule) {
+    globalThis.pdfjsWorker = workerModule;
+  }
+  pdfjsLib.GlobalWorkerOptions.workerSrc = workerModuleUrl;
+
   const bytes = await fetchCvBytes();
-  const loadingTask = pdfjsLib.getDocument({ data: bytes.slice() });
+  const loadingTask = pdfjsLib.getDocument({
+    data: bytes.slice(),
+    standardFontDataUrl,
+    isEvalSupported: false,
+  });
   cvPdfDoc = await loadingTask.promise;
   return cvPdfDoc;
 }
@@ -455,8 +471,7 @@ async function renderCvPages() {
       canvas.style.height = `${Math.floor(cssViewport.height)}px`;
       canvas.setAttribute("aria-label", `CV Page ${pageNum} of ${totalPages}`);
 
-      const ctx = canvas.getContext("2d");
-      await page.render({ canvasContext: ctx, viewport: renderViewport }).promise;
+      await page.render({ canvas, viewport: renderViewport }).promise;
       if (currentSeq !== cvRenderSeq) return;
 
       fragment.appendChild(canvas);

@@ -29,8 +29,13 @@ app.use((req, res, next) => {
 });
 
 app.use(
+  '/vendor/pdfjs/standard_fonts',
+  express.static(path.join(__dirname, 'node_modules', 'pdfjs-dist', 'standard_fonts'))
+);
+
+app.use(
   '/vendor/pdfjs',
-  express.static(path.join(__dirname, 'node_modules', 'pdfjs-dist', 'build'), {
+  express.static(path.join(__dirname, 'node_modules', 'pdfjs-dist', 'legacy', 'build'), {
     setHeaders: (res, filePath) => {
       if (filePath.endsWith('.mjs')) {
         res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
