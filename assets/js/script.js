@@ -235,29 +235,76 @@ for (let i = 0; i < filterBtn.length; i++) {
 
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
+const navBrand = document.querySelector("[data-nav-brand]");
+const navToggle = document.querySelector("[data-nav-toggle]");
+const navMenu = document.querySelector("[data-nav-menu]");
+
+function closeNavMenu() {
+  if (navMenu) navMenu.classList.remove("open");
+  if (navToggle) {
+    navToggle.classList.remove("open");
+    navToggle.setAttribute("aria-expanded", "false");
+  }
+}
+
+if (navToggle && navMenu) {
+  navToggle.addEventListener("click", function (event) {
+    event.stopPropagation();
+    const isOpen = navMenu.classList.toggle("open");
+    navToggle.classList.toggle("open", isOpen);
+    navToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  document.addEventListener("click", function (event) {
+    if (!navMenu.contains(event.target) && !navToggle.contains(event.target)) {
+      closeNavMenu();
+    }
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      closeNavMenu();
+    }
+  });
+}
 
 // This function updates the URL without reloading the page
 function updateUrlWithoutReload(route) {
   history.pushState({}, "", route);
 }
 
+function activatePage(targetPage) {
+  updateUrlWithoutReload(`#/${targetPage}`);
+  closeNavMenu();
+
+  for (let i = 0; i < pages.length; i++) {
+    if (targetPage === pages[i].dataset.page) {
+      pages[i].classList.add("active");
+      window.scrollTo(0, 0);
+    } else {
+      pages[i].classList.remove("active");
+    }
+  }
+
+  for (let i = 0; i < navigationLinks.length; i++) {
+    if (targetPage === navigationLinks[i].dataset.page) {
+      navigationLinks[i].classList.add("active");
+    } else {
+      navigationLinks[i].classList.remove("active");
+    }
+  }
+}
+
 for (let i = 0; i < navigationLinks.length; i++) {
   navigationLinks[i].addEventListener("click", function (event) {
-    event.preventDefault(); // Prevent the default behavior of following the link
+    event.preventDefault();
+    activatePage(this.dataset.page);
+  });
+}
 
-    const targetPage = this.dataset.page; // Get the page name from data-page attribute
-
-    // Update the URL hash routing
-    updateUrlWithoutReload(`#/${targetPage}`);
-
-    for (let i = 0; i < pages.length; i++) {
-      if (targetPage === pages[i].dataset.page) {
-        pages[i].classList.add("active");
-        window.scrollTo(0, 0);
-      } else {
-        pages[i].classList.remove("active");
-      }
-    }
+if (navBrand) {
+  navBrand.addEventListener("click", function () {
+    activatePage("home");
   });
 }
 
@@ -315,5 +362,10 @@ function showShortDescription(index) {
 
 function openCV() {
   window.open("https://drive.google.com/file/d/1ici9KE6j3hqpsxk3YcW32laEK69j_8Uq/view?usp=sharing", "_blank");
+}
+
+const copyrightYearEl = document.querySelector(".copyright-year");
+if (copyrightYearEl) {
+  copyrightYearEl.textContent = new Date().getFullYear();
 }
 
