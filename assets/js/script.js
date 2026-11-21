@@ -406,24 +406,50 @@ async function fetchCvBytes() {
 
 async function loadCvPdfDoc() {
   if (cvPdfDoc) return cvPdfDoc;
-  const pdfModuleUrl = new URL("./vendor/pdfjs/pdf.min.mjs", window.location.href).href;
-  const workerModuleUrl = new URL("./vendor/pdfjs/pdf.worker.min.mjs", window.location.href).href;
-  const standardFontDataUrl = new URL("./vendor/pdfjs/standard_fonts/", window.location.href).href;
 
-  const [pdfjsLib, workerModule] = await Promise.all([
-    import(pdfModuleUrl),
-    import(workerModuleUrl),
-  ]);
+  const sources = [
+    {
+      pdfUrl: new URL("./assets/vendor/pdfjs/pdf.min.js", window.location.href).href,
+      workerUrl: new URL("./assets/vendor/pdfjs/pdf.worker.min.js", window.location.href).href,
+      standardFontDataUrl: new URL("./assets/vendor/pdfjs/standard_fonts/", window.location.href).href,
+    },
+    {
+      pdfUrl: "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/legacy/build/pdf.min.mjs",
+      workerUrl: "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/legacy/build/pdf.worker.min.mjs",
+      standardFontDataUrl: "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/standard_fonts/",
+    },
+  ];
 
-  if (!globalThis.pdfjsWorker && workerModule) {
-    globalThis.pdfjsWorker = workerModule;
+  let pdfjsLib = null;
+  let activeSource = null;
+  let lastError = null;
+
+  for (const src of sources) {
+    try {
+      const [lib, workerModule] = await Promise.all([
+        import(src.pdfUrl),
+        import(src.workerUrl),
+      ]);
+      if (!globalThis.pdfjsWorker && workerModule) {
+        globalThis.pdfjsWorker = workerModule;
+      }
+      lib.GlobalWorkerOptions.workerSrc = src.workerUrl;
+      pdfjsLib = lib;
+      activeSource = src;
+      break;
+    } catch (err) {
+      lastError = err;
+    }
   }
-  pdfjsLib.GlobalWorkerOptions.workerSrc = workerModuleUrl;
+
+  if (!pdfjsLib || !activeSource) {
+    throw lastError || new Error("Could not load PDF renderer");
+  }
 
   const bytes = await fetchCvBytes();
   const loadingTask = pdfjsLib.getDocument({
     data: bytes.slice(),
-    standardFontDataUrl,
+    standardFontDataUrl: activeSource.standardFontDataUrl,
     isEvalSupported: false,
   });
   cvPdfDoc = await loadingTask.promise;
@@ -472,7 +498,8 @@ async function renderCvPages() {
       canvas.style.height = `${Math.floor(cssViewport.height)}px`;
       canvas.setAttribute("aria-label", `CV Page ${pageNum} of ${totalPages}`);
 
-      await page.render({ canvas, viewport: renderViewport }).promise;
+      const ctx = canvas.getContext("2d");
+      await page.render({ canvasContext: ctx, viewport: renderViewport }).promise;
       if (currentSeq !== cvRenderSeq) return;
 
       fragment.appendChild(canvas);
