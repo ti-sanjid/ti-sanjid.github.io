@@ -974,10 +974,9 @@ main {
 
 .resume-contact-card {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 14px 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
   padding: 18px 22px;
   margin-bottom: 32px;
   background: var(--bg-gradient-jet);
